@@ -1,0 +1,9 @@
+{
+  "name": "love-letter",
+  "version": "0.0.1",
+  "description": "app for love-letter",
+  "dependencies": {
+    "express": "^4.10.2",
+    "socket.io": "^1.4.8"
+  }
+}
