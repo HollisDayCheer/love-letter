@@ -6,3 +6,11 @@ var path = require('path')
 app.get('/', function(req, res){
     res.sendfile(path.join(__dirname, '../web/index.html'));
 });
+
+io.on('connection', function(socket){
+    console.log('Got connection');
+});
+
+http.listen(3000, function(){
+    console.log('listening 3000 for new sockets');
+});
