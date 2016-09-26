@@ -38,3 +38,4 @@ jspm_packages
 
 #Env file
 .env
+server/.env

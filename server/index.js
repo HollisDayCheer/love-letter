@@ -3,24 +3,21 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path')
-var env = require('node-env-file');
-env(__dirname + '/.env');
+require('dotenv').config();
 
 
 var passport = require('passport');
-var GoogleStrategy = require('passport-oath-google').Oath2Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 passport.use(new GoogleStrategy({
-	clientID: GOOGLE_CLIENT_ID,
-	clientSecret: GOOGLE_CLIENT_SECRET,
+	clientID: process.env.GOOGLE_CLIENT_ID,
+	clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 	callbackURL: "/auth/google/callback"
 },
 function(accessToken, refreshToken, profile, done){
-	User.findOrCreate({googleId: profile.id}, function(err, user){
-		return done(err, user);
-	})
-}
-})) 
+	//create our own user database and insert or find user here
+		return done(JSON.stringify(profile.id));
+	})) 
 
 app.get('/', function(req, res){
     res.sendfile(path.join(__dirname, '../web/public/index.html'));
@@ -35,8 +32,9 @@ app.get('/auth/google/callback',
 		failureFlash: 'invalid login, something went wrong',
 		successFlash: 'Logged In!'}), 
 	function(req, res){
-		res.redirect('/');
+		res.sendfile(path.join(__dirname, '../web/public/index.html'));
 	});
+
 app.use(express.static(path.join(__dirname, '../web/public')))
 
 io.on('connection', function(socket){
