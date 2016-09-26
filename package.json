@@ -4,6 +4,8 @@
   "description": "app for love-letter",
   "dependencies": {
     "express": "^4.10.2",
+    "node-env-file": "^0.1.8",
+    "passport": "^0.3.2",
     "socket.io": "^1.4.8"
   }
 }
