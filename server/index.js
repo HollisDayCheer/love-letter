@@ -16,8 +16,18 @@ passport.use(new GoogleStrategy({
 },
 function(accessToken, refreshToken, profile, done){
 	//create our own user database and insert or find user here
-		return done(JSON.stringify(profile.id));
-	})) 
+	done(null, profile.id);
+	}
+));
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(id, done) {
+  done(null, id);
+});
+
+app.use(passport.initialize());
 
 app.get('/', function(req, res){
     res.sendfile(path.join(__dirname, '../web/public/index.html'));
@@ -28,11 +38,11 @@ app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.go
 
 app.get('/auth/google/callback', 
 	passport.authenticate('google', {
-		failureRedirect: '/login', 
-		failureFlash: 'invalid login, something went wrong',
-		successFlash: 'Logged In!'}), 
+		failureRedirect: '/login'
+		}), 
 	function(req, res){
-		res.sendfile(path.join(__dirname, '../web/public/index.html'));
+		console.log('callback method in path'+ new Date().getDate());
+		res.redirect('/');
 	});
 
 app.use(express.static(path.join(__dirname, '../web/public')))
